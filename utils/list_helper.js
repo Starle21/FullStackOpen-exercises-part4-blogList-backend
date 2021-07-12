@@ -9,17 +9,19 @@ const totalLikes = (blogs) => {
 };
 
 const favoriteBlog = (blogs) => {
-  return blogs.reduce(
-    (max, blog) => {
-      if (blog.likes > max.likes) {
-        max.title = blog.title;
-        max.author = blog.author;
-        max.likes = blog.likes;
-      }
-      return max;
-    },
-    { title: "", author: "", likes: 0 }
-  );
+  return blogs.length === 0
+    ? {}
+    : blogs.reduce(
+        (max, blog) => {
+          if (blog.likes > max.likes) {
+            max.title = blog.title;
+            max.author = blog.author;
+            max.likes = blog.likes;
+          }
+          return max;
+        },
+        { title: "", author: "", likes: 0 }
+      );
 };
 
 module.exports = {
