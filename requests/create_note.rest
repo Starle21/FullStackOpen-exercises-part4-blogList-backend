@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title":"Third test",
-    "author": "After Dotenv added",
+    "title":"After full refactoring",
+    "author": "New Folder Structure",
     "url": "http://whatever.com",
-    "likes": 2
+    "likes": 20
 }
