@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title":"Third test",
+    "author": "After Dotenv added",
+    "url": "http://whatever.com",
+    "likes": 2
+}
