@@ -70,10 +70,51 @@ const mostBlogs = (blogs) => {
   return blogs.length === 0 ? {} : lodash.maxBy(mapped, "blogs");
 };
 
+// sum all likes of each author
 const mostLikes = (blogs) => {
-  // sum likes of all authors
-  // [{author, likes},{author, likes}]
-  // return author with max total likes
+  // // A version without lodash
+  // // take only authors
+  // const authors = blogs.map((blog) => {
+  //   return { author: blog.author, likes: blog.likes };
+  // });
+  // const authorLikes = [];
+
+  // // put the same authors together
+  // authors.forEach((i) => {
+  //   const foundAuthor = authorLikes.find((el) => el.author === i.author);
+  //   if (foundAuthor) {
+  //     foundAuthor.likes += i.likes;
+  //   } else {
+  //     authorLikes.push({
+  //       author: i.author,
+  //       likes: i.likes,
+  //     });
+  //   }
+  // });
+
+  // // take only the author with the most blogs
+  // return authorLikes.length === 0
+  //   ? {}
+  //   : authorLikes.reduce(
+  //       (max, author) => {
+  //         if (author.likes > max.likes) {
+  //           max = author;
+  //         }
+  //         return max;
+  //       },
+  //       { author: "", likes: 0 }
+  //     );
+
+  //B lodash version
+  const grouppedAuthors = lodash.groupBy(blogs, "author");
+  const likes = lodash.map(grouppedAuthors, (val, key) => {
+    const totalLikes = val.reduce((likes, item) => likes + item.likes, 0);
+    return {
+      author: key,
+      likes: totalLikes,
+    };
+  });
+  return blogs.length === 0 ? {} : lodash.maxBy(likes, "likes");
 };
 
 module.exports = {
