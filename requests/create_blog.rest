@@ -2,7 +2,7 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title":"Without status sends 201",
+    "title":"To be removed",
     "author": "New Folder Structure",
     "url": "http://whatever.com",
     "likes": 20

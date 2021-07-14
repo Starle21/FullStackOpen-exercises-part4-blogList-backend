@@ -87,6 +87,35 @@ describe("adding a new blog", () => {
   });
 });
 
+describe("deleting a blog", () => {
+  test("with a valid id succeeds", async () => {
+    const blogsAtStart = await helper.blogsInDB();
+    const blogToDelete = blogsAtStart[0];
+
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+    const blogsAtEnd = await helper.blogsInDB();
+
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1);
+
+    const urls = blogsAtEnd.map((r) => r.url);
+
+    expect(urls).not.toContain(blogToDelete.url);
+  });
+
+  test("fails with statuscode 400 when id is invalid", async () => {
+    const invalidId = "60eebf2455";
+
+    await api.delete(`/api/blogs/${invalidId}`).expect(400);
+  });
+
+  test("fails with statuscode 404 when note does not exist", async () => {
+    const validNonexistingId = await helper.nonExistingId();
+    console.log(validNonexistingId);
+    await api.delete(`/api/notes/${validNonexistingId}`).expect(404);
+  });
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });

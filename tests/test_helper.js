@@ -26,4 +26,16 @@ const blogsInDB = async () => {
   return blogs.map((b) => b.toJSON());
 };
 
-module.exports = { initialBlogs, blogsInDB };
+const nonExistingId = async () => {
+  const blog = new Blog({
+    title: "To be removed in a bit",
+    author: "Robert C. Martinnn",
+    url: "http://blog.cleancoderrrrrrrr.com/",
+  });
+  await blog.save();
+  await blog.remove();
+
+  return blog._id.toString();
+};
+
+module.exports = { initialBlogs, blogsInDB, nonExistingId };
