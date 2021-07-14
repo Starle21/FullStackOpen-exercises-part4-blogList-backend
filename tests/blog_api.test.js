@@ -57,7 +57,7 @@ describe("adding a new blog", () => {
     expect(titles).toContain("First class tests");
   });
 
-  test("with likes property missing", async () => {
+  test("with likes property missing defaults to likes 0", async () => {
     const newBlogWithoutLikes = {
       title: "Without Likes",
       author: "Robert C. Martin",
@@ -74,6 +74,16 @@ describe("adding a new blog", () => {
     // version 2
     const addedBlog = await Blog.findById(savedBlog.body.id);
     expect(addedBlog.likes).toEqual(0);
+  });
+
+  test("with title and url missing is invalid", async () => {
+    const invalidBlog = {
+      author: "Robert C. Martin",
+    };
+    await api.post("/api/blogs").send(invalidBlog).expect(400);
+
+    const blogsAtEnd = await helper.blogsInDB();
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
   });
 });
 
