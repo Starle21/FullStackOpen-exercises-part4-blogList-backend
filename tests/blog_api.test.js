@@ -37,7 +37,7 @@ describe("getting initial blogs when the db is not empty", () => {
 });
 
 describe("adding a new blog", () => {
-  test.only("with the correct data creates new resource", async () => {
+  test("with the correct data creates new resource", async () => {
     const newBlog = {
       title: "First class tests",
       author: "Robert C. Martin",
@@ -55,6 +55,25 @@ describe("adding a new blog", () => {
 
     const titles = newBlogAdded.map((i) => i.title);
     expect(titles).toContain("First class tests");
+  });
+
+  test("with likes property missing", async () => {
+    const newBlogWithoutLikes = {
+      title: "Without Likes",
+      author: "Robert C. Martin",
+      url: "http://blog.cleancoder.com/",
+    };
+    const savedBlog = await api
+      .post("/api/blogs")
+      .send(newBlogWithoutLikes)
+      .expect(201);
+
+    // // version 1
+    // expect(savedBlog.body.likes).toBe(0);
+
+    // version 2
+    const addedBlog = await Blog.findById(savedBlog.body.id);
+    expect(addedBlog.likes).toEqual(0);
   });
 });
 
