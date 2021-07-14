@@ -55,7 +55,7 @@ describe("adding a new blog", () => {
 
     const titles = newBlogAdded.map((i) => i.title);
     expect(titles).toContain("First class tests");
-  });
+  }, 100000);
 
   test("with likes property missing defaults to likes 0", async () => {
     const newBlogWithoutLikes = {
@@ -111,8 +111,58 @@ describe("deleting a blog", () => {
 
   test("fails with statuscode 404 when note does not exist", async () => {
     const validNonexistingId = await helper.nonExistingId();
-    console.log(validNonexistingId);
     await api.delete(`/api/notes/${validNonexistingId}`).expect(404);
+  });
+});
+
+describe("updating a blog", () => {
+  test("with correct id and all the required data succeeds", async () => {
+    const blogsAtStart = await helper.blogsInDB();
+    const blogToUpdate = blogsAtStart[0];
+
+    const contentToUpdate = {
+      title: "Updated Blog",
+      author: "Updated author",
+      url: "http://blog.updated.com/",
+      likes: 99,
+    };
+
+    const returnedBlog = await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(contentToUpdate)
+      .expect(200);
+
+    const updatedBlog = await Blog.findById(returnedBlog.body.id);
+    expect(updatedBlog.likes).toEqual(99);
+  });
+
+  test("with correct id but NOT all the required data returns 400", async () => {
+    const blogsAtStart = await helper.blogsInDB();
+    const blogToUpdate = blogsAtStart[0];
+
+    const invalidContent = {
+      title: "Updated Blog",
+      author: "Updated author",
+      likes: 50,
+    };
+
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(invalidContent)
+      .expect(400);
+  });
+
+  test("with incorrect id returns 400", async () => {
+    const invalidId = "60eebf2455";
+
+    const contentToUpdate = {
+      title: "Updated Blog",
+      author: "Updated author",
+      url: "http://blog.updated.com/",
+      likes: 99,
+    };
+
+    await api.put(`/api/blogs/${invalidId}`).send(contentToUpdate).expect(400);
   });
 });
 

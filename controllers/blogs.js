@@ -28,6 +28,38 @@ blogsRouter.post("/", async (request, response) => {
   response.status(201).json(savedBlog);
 });
 
+blogsRouter.put("/:id", async (request, response) => {
+  // version 1
+  const body = request.body;
+  const contentToUpdate = {
+    title: body.title,
+    author: body.author,
+    url: body.url,
+    likes: body.likes,
+  };
+  const updatedBlog = await Blog.findByIdAndUpdate(
+    request.params.id,
+    contentToUpdate,
+    { runValidators: true, new: true }
+  );
+  response.json(updatedBlog);
+
+  // // version 2
+  // const foundBlog = await Blog.findById(request.params.id);
+  // console.log(foundBlog.toJSON());
+
+  // //new object with the new data, if not specified, it takes the old data
+  // const body = request.body;
+  // foundBlog.likes = body.likes || foundBlog.likes;
+  // foundBlog.author = body.author || foundBlog.author;
+  // foundBlog.title = body.title || foundBlog.title;
+  // foundBlog.url = body.url || foundBlog.url;
+  // console.log(foundBlog);
+
+  // const updatedBlog = await foundBlog.save();
+  // response.json(updatedBlog);
+});
+
 blogsRouter.delete("/:id", async (request, response) => {
   await Blog.findByIdAndRemove(request.params.id);
   response.status(204).end();
