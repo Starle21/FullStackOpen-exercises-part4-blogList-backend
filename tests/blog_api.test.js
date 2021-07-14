@@ -36,6 +36,28 @@ describe("getting initial blogs when the db is not empty", () => {
   });
 });
 
+describe("adding a new blog", () => {
+  test.only("with the correct data creates new resource", async () => {
+    const newBlog = {
+      title: "First class tests",
+      author: "Robert C. Martin",
+      url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.html",
+      likes: 10,
+    };
+    await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
+
+    const newBlogAdded = await helper.blogsInDB();
+    expect(newBlogAdded).toHaveLength(helper.initialBlogs.length + 1);
+
+    const titles = newBlogAdded.map((i) => i.title);
+    expect(titles).toContain("First class tests");
+  });
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });

@@ -2,7 +2,7 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title":"After full refactoring",
+    "title":"Without status sends 201",
     "author": "New Folder Structure",
     "url": "http://whatever.com",
     "likes": 20
