@@ -11,7 +11,7 @@ const User = require("../models/user");
 beforeEach(async () => {
   await Blog.deleteMany();
   await Blog.insertMany(helper.initialBlogs);
-});
+}, 100000);
 
 describe("getting initial blogs when the db is not empty", () => {
   test("blogs returned in JSON", async () => {
@@ -19,7 +19,7 @@ describe("getting initial blogs when the db is not empty", () => {
       .get("/api/blogs")
       .expect(200)
       .expect("Content-Type", /application\/json/);
-  });
+  }, 100000);
   test("getting all inital blogs", async () => {
     const response = await api.get("/api/blogs");
     expect(response.body).toHaveLength(helper.initialBlogs.length);
@@ -35,7 +35,7 @@ describe("getting initial blogs when the db is not empty", () => {
     const blogsInitial = await helper.blogsInDB();
     const blogToCheck = blogsInitial[0];
     expect(blogToCheck.id).toBeDefined();
-  });
+  }, 100000);
 });
 
 describe("adding a new blog", () => {
@@ -208,9 +208,9 @@ describe("when there is initially one user in db", () => {
 
     const usernames = usersAtEnd.map((u) => u.username);
     expect(usernames).toContain(newUser.username);
-  }, 100000);
+  });
 
-  test("using an already taken name fails", async () => {
+  test("using an already taken username fails", async () => {
     const usersAtStart = await helper.usersInDb();
     //create a new user with already taken name
     const newUser = {
@@ -225,6 +225,69 @@ describe("when there is initially one user in db", () => {
       .expect("Content-Type", /application\/json/);
 
     expect(result.body.error).toContain("`username` to be unique");
+
+    const usersAtEnd = await helper.usersInDb();
+    expect(usersAtEnd).toHaveLength(usersAtStart.length);
+  });
+
+  //username less than 3 characters
+  test("username less than 3 characters fails", async () => {
+    const usersAtStart = await helper.usersInDb();
+
+    const newUser = {
+      username: "xx",
+      password: "password",
+    };
+    //send and expect 400 bad request
+    const result = await api
+      .post("/api/users")
+      .send(newUser)
+      .expect(400)
+      .expect("Content-Type", /application\/json/);
+
+    expect(result.body.error).toContain("is shorter");
+
+    const usersAtEnd = await helper.usersInDb();
+    expect(usersAtEnd).toHaveLength(usersAtStart.length);
+  });
+
+  //password too short
+  test("password too short fails", async () => {
+    const usersAtStart = await helper.usersInDb();
+
+    const newUser = {
+      username: "xx",
+      password: "p",
+    };
+    //send and expect 400 bad request
+    const result = await api
+      .post("/api/users")
+      .send(newUser)
+      .expect(400)
+      .expect("Content-Type", /application\/json/);
+
+    expect(result.body.error).toContain("missing or too short");
+
+    const usersAtEnd = await helper.usersInDb();
+    expect(usersAtEnd).toHaveLength(usersAtStart.length);
+  });
+
+  //username missing
+  test("username missing fails", async () => {
+    const usersAtStart = await helper.usersInDb();
+
+    const newUser = {
+      username: "",
+      password: "password",
+    };
+    //send and expect 400 bad request
+    const result = await api
+      .post("/api/users")
+      .send(newUser)
+      .expect(400)
+      .expect("Content-Type", /application\/json/);
+
+    expect(result.body.error).toContain("`username` is required");
 
     const usersAtEnd = await helper.usersInDb();
     expect(usersAtEnd).toHaveLength(usersAtStart.length);

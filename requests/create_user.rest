@@ -4,6 +4,6 @@ Content-Type: application/json
 // gets created in the production database
 {
     "name":"Tom",
-    "username": "idontknowtom",
-    "password": "password"
+    "username": "xxxxx",
+    "password": "pas"
 }
