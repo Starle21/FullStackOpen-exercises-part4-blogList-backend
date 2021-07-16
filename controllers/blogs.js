@@ -36,6 +36,7 @@ blogsRouter.post("/", userExtractor, async (request, response) => {
   response.status(201).json(savedBlog);
 });
 
+// not updated to include token authorization
 blogsRouter.put("/:id", async (request, response) => {
   // version 1
   const body = request.body;
