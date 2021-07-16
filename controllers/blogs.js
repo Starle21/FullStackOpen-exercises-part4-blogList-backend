@@ -10,14 +10,6 @@ const jwt = require("jsonwebtoken");
 //   });
 // });
 
-const getTokenFrom = (request) => {
-  const authorization = request.get("authorization");
-  if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
-    return authorization.substring(7);
-  }
-  return null;
-};
-
 // ASYNC AWAIT
 blogsRouter.get("/", async (request, response) => {
   const blogs = await Blog.find({}).populate("user", { name: 1, username: 1 });
@@ -28,9 +20,8 @@ blogsRouter.post("/", async (request, response) => {
   const body = request.body;
 
   //check body.token matches user.token
-  const token = getTokenFrom(request);
-  const decodedToken = jwt.verify(token, process.env.SECRET);
-  if (!token || !decodedToken.id) {
+  const decodedToken = jwt.verify(request.token, process.env.SECRET);
+  if (!request.token || !decodedToken.id) {
     return res.status(401).json({ error: "token missing or invalid" });
   }
   //find user
