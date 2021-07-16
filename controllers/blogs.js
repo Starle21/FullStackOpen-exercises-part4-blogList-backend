@@ -1,5 +1,6 @@
 const blogsRouter = require("express").Router();
 const Blog = require("../models/blog");
+const User = require("../models/user");
 
 // // CHAINING PROMISES
 // blogsRouter.get("/", (request, response) => {
@@ -10,21 +11,26 @@ const Blog = require("../models/blog");
 
 // ASYNC AWAIT
 blogsRouter.get("/", async (request, response) => {
-  const blogs = await Blog.find({});
+  const blogs = await Blog.find({}).populate("user");
   response.json(blogs);
 });
 
 blogsRouter.post("/", async (request, response) => {
   const body = request.body;
 
+  const user = await User.find({});
+  const creator = user[0];
+
   const newBlog = new Blog({
     title: body.title,
     author: body.author,
     url: body.url,
     likes: body.likes,
+    user: creator._id,
   });
 
   const savedBlog = await newBlog.save();
+
   response.status(201).json(savedBlog);
 });
 
