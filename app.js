@@ -7,6 +7,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const blogsRouter = require("./controllers/blogs");
 const usersRouter = require("./controllers/users");
+const loginRouter = require("./controllers/login");
 
 // creates express application
 const app = express();
@@ -36,6 +37,7 @@ app.use(middleware.requestLogger);
 // routes
 app.use("/api/blogs", blogsRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/login", loginRouter);
 
 // post middleware
 app.use(middleware.unknownEndpoint);
