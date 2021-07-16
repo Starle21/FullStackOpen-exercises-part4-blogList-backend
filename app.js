@@ -34,8 +34,10 @@ app.use(cors());
 app.use(express.json());
 app.use(middleware.requestLogger);
 
-// routes
+// extracting token
 app.use(middleware.tokenExtractor);
+
+// routes
 app.use("/api/blogs", blogsRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/login", loginRouter);

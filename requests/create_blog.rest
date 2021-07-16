@@ -1,10 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IndpZGltc2tpIiwiaWQiOiI2MGVmZWZhNjVkODAzOTE3YjRkZmUzZDIiLCJpYXQiOjE2MjY0MzY3ODQsImV4cCI6MTYyNjQ0MDM4NH0.znd8big3pZ991kVePw3a9LQta5hmNLMWP_uXhZCZY-4
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IndpZGltc2tpIiwiaWQiOiI2MGVmZWZhNjVkODAzOTE3YjRkZmUzZDIiLCJpYXQiOjE2MjY0NDM1MzksImV4cCI6MTYyNjQ0NzEzOX0.3q5_lRTEsnc1zZfNmXXubRAYLXTjmeDQZCtKZ85nxdE
 
 {
-    "title":"Token authorization in middleware",
-    "author": "New Folder Structure",
+    "title":"4.22",
+    "author": "Middleware",
     "url": "http://whatever.com",
     "likes": 20
 }
