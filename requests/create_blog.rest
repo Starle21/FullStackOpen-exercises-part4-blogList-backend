@@ -2,7 +2,7 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title":"To be removed",
+    "title":"Now it's working!",
     "author": "New Folder Structure",
     "url": "http://whatever.com",
     "likes": 20
