@@ -1,2 +1,4 @@
-DELETE http://localhost:3003/api/blogs/60f197b5a59d051e7c9c7ca9
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IndpZGltc2t
+@blogId = 60f16020f685420d80a7a9ff
+
+DELETE {{baseUrl}}/api/blogs/{{blogId}}
+Authorization: bearer {{authorization}}

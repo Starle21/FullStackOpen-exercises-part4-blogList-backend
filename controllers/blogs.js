@@ -29,7 +29,6 @@ blogsRouter.post("/", userExtractor, async (request, response) => {
   });
 
   const savedBlog = await newBlog.save();
-
   user.blogs = user.blogs.concat(savedBlog._id);
   await user.save();
 
@@ -40,6 +39,7 @@ blogsRouter.post("/", userExtractor, async (request, response) => {
 blogsRouter.put("/:id", async (request, response) => {
   // version 1
   const body = request.body;
+  console.log(body);
   const contentToUpdate = {
     title: body.title,
     author: body.author,
@@ -50,7 +50,7 @@ blogsRouter.put("/:id", async (request, response) => {
     request.params.id,
     contentToUpdate,
     { runValidators: true, new: true }
-  );
+  ).populate("user", { name: 1, username: 1 });
   response.json(updatedBlog);
 
   // // version 2
